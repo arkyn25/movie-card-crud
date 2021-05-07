@@ -8,60 +8,44 @@ import { Loading } from '../components';
 class MovieDetails extends Component {
   constructor(props) {
     super(props);
-
-    this.fetchMovie = this.fetchMovie.bind(this);
-
     this.state = {
-      title: '',
-      subtitle: '',
-      storyline: '',
-      genre: '',
-      rating: '',
-      imagePath: '',
+      movie: {},
       loading: true,
     };
   }
 
   componentDidMount() {
-    this.fetchMovie();
-  }
-
-  async fetchMovie() {
     const { match } = this.props;
-    const { params } = match;
-    const movie = await movieAPI.getMovie(params.id);
-    const { id, title, storyline, imagePath, genre, rating, subtitle } = movie;
-
-    this.setState({
-      id,
-      title,
-      subtitle,
-      storyline,
-      imagePath,
-      genre,
-      rating,
-      loading: false,
+    const { id } = match.params;
+    movieAPI.getMovie(id).then((movie) => {
+      this.setState({
+        movie,
+        loading: false,
+      });
     });
   }
 
   render() {
-    const { loading } = this.state;
-    if (loading === true) return <Loading />;
-
-    const { id, title, storyline, imagePath, genre, rating, subtitle } = this.state;
-
+    const { movie, loading } = this.state;
+    const { match } = this.props;
+    const { id } = match.params;
+    const { title, storyline, imagePath, genre, rating, subtitle } = movie;
     return (
       <div data-testid="movie-details">
-        <img alt="Movie Cover" src={ `../${imagePath}` } />
-        <p>{ `Title: ${title}` }</p>
-        <p>{ `Subtitle: ${subtitle}` }</p>
-        <p>{ `Storyline: ${storyline}` }</p>
-        <p>{ `Genre: ${genre}` }</p>
-        <p>{ `Rating: ${rating}` }</p>
-        <div>
-          <Link to="/">VOLTAR</Link>
-          <Link to={ `/movies/${id}/edit` }>EDITAR</Link>
-        </div>
+        {!loading ? (
+          <div>
+            <img alt="Movie Cover" src={ `../${imagePath}` } />
+            <p>{ `Title: ${title}` }</p>
+            <p>{ `Subtitle: ${subtitle}` }</p>
+            <p>{ `Storyline: ${storyline}` }</p>
+            <p>{ `Genre: ${genre}` }</p>
+            <p>{ `Rating: ${rating}` }</p>
+            <div>
+              <Link to="/">VOLTAR</Link>
+              <Link to={ `/movies/${id}/edit` }>EDITAR</Link>
+            </div>
+          </div>
+        ) : <Loading />}
       </div>
     );
   }
@@ -70,8 +54,8 @@ class MovieDetails extends Component {
 MovieDetails.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
+      id: PropTypes.number,
+    }),
   }).isRequired,
 };
 
