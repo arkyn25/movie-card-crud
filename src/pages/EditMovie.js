@@ -38,16 +38,6 @@ class EditMovie extends Component {
       });
   }
 
-  async fetchMovie() {
-    const { match } = this.props;
-    const { id } = match.params;
-    const movie = await movieAPI.getMovie(id);
-    this.setState({
-      movie,
-      status: 'loaded',
-    });
-  }
-
   render() {
     const { status, shouldRedirect, movie } = this.state;
     if (shouldRedirect) {
