@@ -3,3 +3,10 @@ body {
   box-sizing: border-box;
 }
 
+.movie-card {
+  text-align: center;
+}
+
+.movie-list {
+  text-align: center;
+}
