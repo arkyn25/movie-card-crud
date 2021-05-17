@@ -30,8 +30,7 @@ class MovieDetails extends Component {
 
   render() {
     const { movie, loading } = this.state;
-    const { match } = this.props;
-    const { id } = match.params;
+    const { match: { params: { id } } } = this.props;
     const { title, storyline, imagePath, genre, rating, subtitle } = movie;
     return (
       <div data-testid="movie-details">
@@ -58,11 +57,8 @@ class MovieDetails extends Component {
 }
 
 MovieDetails.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.number,
-    }),
-  }).isRequired,
-};
+  match: PropTypes.object,
+  id: PropTypes.string,
+}.isRequired;
 
 export default MovieDetails;
