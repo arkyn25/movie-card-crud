@@ -8,5 +8,8 @@ body {
 }
 
 .movie-list {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   text-align: center;
 }
